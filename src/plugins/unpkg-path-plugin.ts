@@ -6,21 +6,25 @@ const fileCache = localForage.createInstance({
   name: 'fileCache'
 })
 
-export const unpkgPathPlugin = () => {
+export const unpkgPathPlugin = (inputCode: string) => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
       build.onResolve({ filter: /.*/ }, async (args: any) => {
+
         console.log('onResole', args)
+
         if (args.path === 'index.js') {
           return { path: args.path, namespace: 'a' }
-        } 
+        }
+
         if (args.path.includes('./') || args.path.includes('../')) {
           return {
             namespace: 'a',
             path: new URL(args.path, 'https://unpkg.com' + args.resolveDir + '/').href
           }
         }
+
         return {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`
@@ -33,14 +37,10 @@ export const unpkgPathPlugin = () => {
         if (args.path === 'index.js') {
           return {
             loader: 'jsx',
-            contents: `
-              import { React, useState } from 'react'
-              console.log(React, useState)
-            `,
+            contents: inputCode,
           }
         }
 
-        // check if we already fetched, if so, return
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(args.path)
 
         if (cachedResult) {
@@ -54,10 +54,11 @@ export const unpkgPathPlugin = () => {
           contents: data,
           resolveDir: new URL('./', request.responseURL).pathname
         }
-        //store in cache
+
         await fileCache.setItem(args.path, result)
         return result
+
       })
-    },
+    }
   }
 }
