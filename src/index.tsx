@@ -30,6 +30,11 @@ const App = () => {
             }
         })
         setCode(result.outputFiles[0].text)
+        try {
+            eval(result.outputFiles[0].text)
+        } catch(err) {
+            console.error('eval() failed:', err.message)
+        }
     }
     return (
         <div>
