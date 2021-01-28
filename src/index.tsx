@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin'
 import { fetchPlugin } from './plugins/fetch-plugin'
+import CodeEditor from './components/code-editor'
 
 const App = () => {
 
@@ -59,10 +60,12 @@ const App = () => {
     `
     return (
         <div>
+            <CodeEditor />
             <textarea
                 spellCheck={false}
                 value={input}
                 onChange={evt => { 
+                    // onClick(evt.target.value)
                     setInput(evt.target.value)
                 }}
             ></textarea>
