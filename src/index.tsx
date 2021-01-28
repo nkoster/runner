@@ -5,18 +5,22 @@ import { unpkgPathPlugin } from './plugins/unpkg-path-plugin'
 import { fetchPlugin } from './plugins/fetch-plugin'
 
 const App = () => {
+
     const ref = useRef<any>()
+    const iframe = useRef<any>()
     const [input, setInput] = useState('')
-    const [code, setCode] = useState('')
+
     const startService = async () => {
         ref.current = await esbuild.startService({
             worker: true,
-            wasmURL: 'https://unpkg.com/esbuild-wasm/esbuild.wasm'
+            wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.34/esbuild.wasm'
         })
     }
+
     useEffect(() => {
         startService()
     }, [])
+
     const onClick = async () => {
         if (!ref.current) return
         const result = await ref.current.build({
@@ -29,13 +33,22 @@ const App = () => {
                 global: 'window'
             }
         })
-        setCode(result.outputFiles[0].text)
-        try {
-            eval(result.outputFiles[0].text)
-        } catch(err) {
-            console.error('eval() failed:', err.message)
-        }
+        iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*')
     }
+
+    const html = `
+        <html>
+            <head></head>
+            <body>
+                <div id="root"></div>
+                <script>
+                    window.addEventListener('message', evt => {
+                        eval(evt.data)
+                    }, false)
+                </script>
+            </body>
+        </html>
+    `
     return (
         <div>
             <textarea
@@ -47,7 +60,12 @@ const App = () => {
             <div>
                 <button onClick={onClick}>transpile</button>
             </div>
-            <pre>{code}</pre>
+            <iframe
+                ref={iframe}
+                title='runner'
+                sandbox='allow-scripts'
+                srcDoc={html}
+            ></iframe>
         </div>
     )
 }
