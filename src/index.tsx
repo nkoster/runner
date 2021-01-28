@@ -52,6 +52,7 @@ const App = () => {
     return (
         <div>
             <textarea
+                spellCheck={false}
                 value={input}
                 onChange={evt => { 
                     setInput(evt.target.value)
