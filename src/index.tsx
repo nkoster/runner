@@ -23,6 +23,8 @@ const App = () => {
 
     const onClick = async () => {
         if (!ref.current) return
+        /* Reset the iframe, first */
+        iframe.current.srcdoc = html
         const result = await ref.current.build({
             entryPoints: ['index.js'],
             bundle: true,
@@ -43,7 +45,13 @@ const App = () => {
                 <div id="root"></div>
                 <script>
                     window.addEventListener('message', evt => {
-                        eval(evt.data)
+                        try {
+                            eval(evt.data)
+                        } catch(err) {
+                            const root = document.querySelector('#root')
+                            root.innerHTML = '<div style="color:red"><h4>Runner Error</h4>&nbsp;' + err + '</div>'
+                            throw err
+                        }
                     }, false)
                 </script>
             </body>
