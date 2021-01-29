@@ -9,6 +9,7 @@ const App = () => {
 
     const ref = useRef<any>()
     const iframe = useRef<any>()
+
     const [input, setInput] = useState('')
 
     const startService = async () => {
@@ -60,7 +61,10 @@ const App = () => {
     `
     return (
         <div>
-            <CodeEditor />
+            <CodeEditor
+                initialValue='//'
+                onChange={setInput}
+            />
             <textarea
                 spellCheck={false}
                 value={input}
