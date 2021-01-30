@@ -13,8 +13,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue = '', onChange }) 
         onChange(editorRef.current.getValue())
     }
 
-    const handleEditorDidMount:OnMount =(editor) => {
-        editorRef.current = editor; 
+    const handleEditorDidMount:OnMount = (editor) => {
+        editorRef.current = editor
+        editor.getModel()?.updateOptions({ tabSize: 2 })
     }
 
     return <MonacoEditor
