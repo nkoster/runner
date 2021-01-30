@@ -1,5 +1,7 @@
 import MonacoEditor, { OnMount } from '@monaco-editor/react'
 import { useRef } from 'react'
+import prettier from 'prettier'
+import parser from 'prettier/parser-babel'
 
 interface CodeEditorProps {
     initialValue?: string
@@ -18,24 +20,42 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue = '', onChange }) 
         editor.getModel()?.updateOptions({ tabSize: 2 })
     }
 
-    return <MonacoEditor
-        onChange={change}
-        onMount={handleEditorDidMount}
-        value={initialValue}
-        height='500px'
-        language='javascript'
-        theme='vs-dark'
-        options={{
-            wordWrap: 'on',
-            minimap: { enabled: false },
-            showUnused: false,
-            folding: false,
-            lineNumbersMinChars: 3,
-            fontSize: 20,
-            scrollBeyondLastLine: false,
-            automaticLayout: true
-        }}
-    />
+    const formatCode = () => {
+        const unformatted = editorRef.current.getValue()
+        const formatted = prettier.format(unformatted, {
+            parser: 'babel',
+            plugins: [parser],
+            useTabs: false,
+            semi: false,
+            singleQuote: true
+        })
+        editorRef.current.setValue(formatted)
+    }
+
+    return (
+        <div>
+            <button onClick={formatCode}>Format</button>
+            <MonacoEditor
+                onChange={change}
+                onMount={handleEditorDidMount}
+                value={initialValue}
+                height='500px'
+                language='javascript'
+                theme='vs-dark'
+                options={{
+                    wordWrap: 'on',
+                    minimap: { enabled: false },
+                    showUnused: false,
+                    folding: false,
+                    lineNumbersMinChars: 3,
+                    fontSize: 20,
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true
+                }}
+            />
+        </div>
+    )
+    
 }
 
 export default CodeEditor
