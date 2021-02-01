@@ -1,5 +1,6 @@
 import MDEditor from '@uiw/react-md-editor'
 import { useEffect, useState, useRef } from 'react'
+import './text-editor.css'
 
 const TextEditor:React.FC = () => {
 
@@ -30,6 +31,7 @@ const TextEditor:React.FC = () => {
         return (
             <div ref={ref}>
                 <MDEditor
+                    spellCheck={false}
                     value={value}
                     onChange={updateValue}
                 />
