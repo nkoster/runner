@@ -32,6 +32,7 @@ const TextEditor:React.FC = () => {
             <div ref={ref}>
                 <MDEditor
                     spellCheck={false}
+                    visiableDragbar={true}
                     value={value}
                     onChange={updateValue}
                 />
