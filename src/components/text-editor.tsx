@@ -1,7 +1,9 @@
 import MDEditor from '@uiw/react-md-editor'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 const TextEditor:React.FC = () => {
+
+    const ref = useRef<HTMLDivElement | null>(null)
 
     const [value, setValue] = useState('# Hi!')
     const [editing, setEditing] = useState(false)
@@ -11,7 +13,11 @@ const TextEditor:React.FC = () => {
     }
 
     useEffect(() => {
-        const listener = () => {
+        const listener = (evt:MouseEvent) => {
+            if (ref.current && evt.target
+                    && ref.current.contains(evt.target as Node)) {
+                return
+            }
             setEditing(false)
         }
         document.addEventListener('click', listener, { capture: true })
@@ -22,10 +28,12 @@ const TextEditor:React.FC = () => {
 
     if (editing) {
         return (
-            <MDEditor
-                value={value}
-                onChange={updateValue}
-            />
+            <div ref={ref}>
+                <MDEditor
+                    value={value}
+                    onChange={updateValue}
+                />
+            </div>
         )
     }
     return (
