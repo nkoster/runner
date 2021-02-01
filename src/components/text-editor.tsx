@@ -31,6 +31,7 @@ const TextEditor:React.FC = () => {
         return (
             <div ref={ref}>
                 <MDEditor
+                    className='text-editor'
                     spellCheck={false}
                     visiableDragbar={true}
                     value={value}
