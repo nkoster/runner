@@ -1,7 +1,7 @@
 import { ActionTypes } from '../action-types'
 import { CellTypes } from '../cell'
 
-interface MoveCellAction {
+export interface MoveCellAction {
     type: ActionTypes.MOVE_CELL,
     payload: {
         id: string,
@@ -9,12 +9,12 @@ interface MoveCellAction {
     }
 }
 
-interface DeleteCellAction {
+export interface DeleteCellAction {
     type: ActionTypes.DELETE_CELL,
     payload: string
 }
 
-interface InsertCellAction {
+export interface InsertCellAction {
     type: ActionTypes.INSERT_CELL,
     payload: {
         id: string,
@@ -22,7 +22,7 @@ interface InsertCellAction {
     }
 }
 
-interface UpdateCellAction {
+export interface UpdateCellAction {
     type: ActionTypes.UPDATE_CELL,
     payload: {
         id: string,
