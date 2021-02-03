@@ -1,11 +1,13 @@
 import { ActionTypes } from '../action-types'
 import { CellTypes } from '../cell'
 
+export type Direction = 'up' | 'down'
+
 export interface MoveCellAction {
     type: ActionTypes.MOVE_CELL,
     payload: {
         id: string,
-        direction: 'up' | 'down'
+        direction: Direction
     }
 }
 
