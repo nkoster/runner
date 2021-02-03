@@ -1,7 +1,9 @@
 import { ActionTypes } from '../action-types'
 import { CellTypes } from '../cell'
+
 import { 
     Actions,
+    Direction,
     MoveCellAction,
     InsertCellAction,
     DeleteCellAction,
@@ -18,7 +20,7 @@ export const updateCell = (id: string, content: string): UpdateCellAction => {
     }
 }
 
-export const moveCell = (id: string, direction: 'up' | 'down'): MoveCellAction => {
+export const moveCell = (id: string, direction: Direction): MoveCellAction => {
     return {
         type: ActionTypes.MOVE_CELL,
         payload: {
