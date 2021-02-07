@@ -19,7 +19,7 @@ export interface DeleteCellAction {
 export interface InsertCellAction {
     type: ActionTypes.INSERT_CELL,
     payload: {
-        id: string,
+        id: string | null,
         type: CellTypes
     }
 }
