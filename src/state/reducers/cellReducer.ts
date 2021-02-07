@@ -28,7 +28,14 @@ const CellReducer = (state: CellState = initialState, action: Actions): CellStat
         case ActionTypes.MOVE_CELL:
             return state
         case ActionTypes.UPDATE_CELL:
-            return state
+            const { id, content } = action.payload
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [id]: { ...state.data[id], content }
+                }
+            }
         default: return state
     }
 }
